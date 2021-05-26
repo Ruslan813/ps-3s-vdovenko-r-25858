@@ -1,30 +1,51 @@
 #include <stdio.h>
-# include <string.h>
-int main(int argc, char* argv[])
- {
- FILE* wp;
- FILE* out;
- int fchar;
- unsigned long i = 1;
- if(argc != 2)
- { printf("Usage: %s fileName\n", argv[0]);
- return 2;
+#include <errno.h>
+#include <string.h>
+
+int main(int argc, char *argv[])
+{
+    FILE *wp;
+    FILE *wr;
+    unsigned long counter = 0;
+    int ch;
+    char f;
+
+    f = strcat(argv[1], ".red");
+    printf("\n File:\n %s \n", argv[1]);
+
+    wr = fopen(f, a+);
+    if(wr == NULL)
+    {
+        printf("Can't open file slowa.txt\n");
+        return 2;
     }
-    if((wp = fopen(argv[1], "r")) == NULL)
-        {
-          fprintf(stderr, "Couldn't open file: %s\n", argv[1]); return 1;
+
+    if(argc != 2)
+    {
+        printf("Usage: %s file_name\n", argv[0]);
+        return 1;
     }
-    if((out = fopen(strcat(argv[1], ".red"), "w")) == NULL)
-	 {
-		 fprintf(stderr, "Couldn't open file: %s\n", argv[1]);
-		 return 3;
+
+    wp = fopen(argv[1], "r");
+    if(!wp)
+    {
+        perror(argv[1]);
+        return 1;
     }
-while((fchar = fgetc(wp)) != EOF) 
-	{
-		 if (i % 3 == 0)
-			 {
-				 fputc(fchar, out);
-       			 }
-       		 i++;
-    	}
- fclose(wp);
+
+    while((ch = fgetc(wp)) != EOF)
+    {
+
+        fseek(wp, counter, SEEK_SET);
+        counter+=3;
+        fputc(ch, wr);
+    }
+
+    fclose(wp);
+
+
+
+
+
+    return 0;
+}
