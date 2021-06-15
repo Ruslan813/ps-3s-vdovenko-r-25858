@@ -6,16 +6,15 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define BUF_SIZE 1024
+#define ROZMIAR_BUF 1
 
 int main(int argc, char *argv[])
 {
     int input_fd, output_fd;
-    char buffer[BUF_SIZE];
+    char bufor[ROZMIAR_BUF];
     ssize_t ret_in, ret_out;
-    char f;
+    int counter=0;
 
-    f = strcat(argv[1], ".red");
 
     if(argc != 2 || strcmp(argv[1], "--help") == 0)
     {
@@ -30,12 +29,19 @@ int main(int argc, char *argv[])
         return 2;
     }
 
-    output_fd = open(f, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+    output_fd = open(strcat(argv[1], ".red"), O_CREAT | O_TRUNC | O_WRONLY, 0644);
     if(output_fd == -1)
     {
-        perror(f);
+        perror(strcat(argv[1], ".red"));
         return 2;
     }
 
-
+    while((ret_in = read(input_fd, &bufor, ROZMIAR_BUF)) > 0)
+    {
+        if(counter%3 == 0)
+        {
+        ret_out = write(output_fd, &bufor, ret_in);
+        }
+        counter++;
+    }
 }
